@@ -1,26 +1,40 @@
 package study.datajpa.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id","username","age"})
 public class Member {
     @Id
     @GeneratedValue
+    @Column(name ="member_id")
     private Long id;
     private String username;
 
-    protected Member() { // jpa 표준 스펙으로 기본적으로 필요한 생성자이다. protected 로 해야하는 이유는 프록시가 들어와야 할 수 있어서이다. private는 프록시가 못들어온다.
-    }
+    private int age;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
+
 
     public Member(String username) {
         this.username = username;
     }
 
+    public void chnageTeam(Team team){
+        this.team = team;
+        team.getMembers().add(this);
+    }
 
+    public Member(String username, int age, Team team) {
+        this.username = username;
+        this.age = age;
+        if(team!=null) {
+            chnageTeam(team);
+        }
+    }
 }
