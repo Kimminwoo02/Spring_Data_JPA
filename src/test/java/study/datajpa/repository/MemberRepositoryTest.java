@@ -167,4 +167,6 @@ class MemberRepositoryTest {
         Optional<Member> aaa = memberRepository.findOptionalByUsername("AAA");
         System.out.println("aaa = " + aaa);
     }
+
+
 }
