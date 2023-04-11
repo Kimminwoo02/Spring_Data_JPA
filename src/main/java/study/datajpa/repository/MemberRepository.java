@@ -6,6 +6,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
+import study.datajpa.entity.JpaBaseEntity;
 import study.datajpa.entity.Member;
 
 import javax.persistence.LockModeType;
