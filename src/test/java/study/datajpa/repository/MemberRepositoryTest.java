@@ -234,7 +234,7 @@ class MemberRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<Member>  members = memberRepository.findEntityGraphByUserName("member1");
+        List<Member>  members = memberRepository.findEntityGraphByUsername("member1");
         //N+1 문제. 쿼리 하나를 날렸는데 결과가 데이터의 숫자만큼 나오는 문제
 
         for (Member member : members) {
@@ -242,6 +242,31 @@ class MemberRepositoryTest {
             System.out.println("member.team  = " + member.getTeam().getName());
         }
     }
+    @Test
+    public void queryHint(){
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        entityManager.flush();
+        entityManager.clear();
+
+        Member findMember = memberRepository.findReadOnlyByUsername("member1");
+        findMember.setUsername("member2");
+
+        entityManager.flush();
+
+    }
+    @Test
+    public void lock(){
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        entityManager.flush();
+        entityManager.clear();
+
+        List<Member> member11 = memberRepository.findLockByUsername("member1");
+
+    }
+
+
 
 
 
