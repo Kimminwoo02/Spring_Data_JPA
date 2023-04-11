@@ -220,4 +220,29 @@ class MemberRepositoryTest {
         assertThat(resultCount).isEqualTo(3);
     }
 
+    @Test
+    public void findMemberLazy(){
+        Team teamA = new Team("TeamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        Member member1 = new Member("member1", 10, teamA);
+        Member member2 = new Member("member1", 20, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        List<Member>  members = memberRepository.findEntityGraphByUserName("member1");
+        //N+1 문제. 쿼리 하나를 날렸는데 결과가 데이터의 숫자만큼 나오는 문제
+
+        for (Member member : members) {
+            System.out.println("member = " + member.getUsername());
+            System.out.println("member.team  = " + member.getTeam().getName());
+        }
+    }
+
+
+
 }
